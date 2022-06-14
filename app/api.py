@@ -2,10 +2,10 @@ from flask import Blueprint, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # app libraries
-import db
-from security import auth_required
-from tokens import encode
-from servers import servers
+from app import db
+from app.security import auth_required
+from app.tokens import encode
+from app.servers import servers
 
 api = Blueprint("api", __name__)
 user = Blueprint("user", __name__)

@@ -1,6 +1,7 @@
 import datetime
 import jwt
-import config
+
+from app import config
 
 
 def decode(token: str):

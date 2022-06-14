@@ -2,8 +2,8 @@ from functools import wraps
 from flask import abort, request
 
 # app libraries
-import db
-from tokens import decode
+from app import db
+from app.tokens import decode
 
 
 def get_token(header: str):

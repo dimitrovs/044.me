@@ -2,6 +2,7 @@ from browser import alert, document
 from browser.template import Template
 
 import api
+from models import Server
 
 servers_tmpl = []
 model = {}
@@ -18,36 +19,53 @@ def change_auth_mode(ev, el):
 
 def add_server(ev, el):
     auth_method = el.data.model.get("auth_method", "password")
-    data = {"username": document["add_server_username"].value,
-            "host": document["add_server_host"].value,
-            "port": document["add_server_port"].value,
-            "auth_method": auth_method,
-            "password": document["add_server_password"].value,
-            "ssh_key": document["add_server_key"].value
-            }
+    server = Server(document["add_server_username"].value,
+                    document["add_server_host"].value,
+                    document["add_server_port"].value,
+                    auth_method, document["add_server_password"].value,
+                    document["add_server_key"].value)
 
     def add_server_response_handler(response):
         if "error" in response:
             alert(response["error"])
-        if "servers" not in model:
-            model["servers"] = []
-        print(response)
-        model["servers"].append(response)
+        else:
+            if "servers" not in model:
+                model["servers"] = []
+            model["servers"].append(response)
         model["loaded"] = True
         servers_tmpl[0].render(model=model)
 
     el.data.model["loaded"] = False
     el.data.model["add_server_mode"] = False
-    api.create_server(data, add_server_response_handler)
+    api.create_server(server.toJSON(), add_server_response_handler)
+
+
+def delete_server(ev, el):
+    server_id = ev.target.id
+
+    def delete_server_response_handler(response):
+        if "error" in response:
+            alert(response["error"])
+        else:
+            model["servers"] = [server for server in model["servers"]
+                                if server["_id"] != server_id]
+        model["loaded"] = True
+        servers_tmpl[0].render(model=model)
+
+    el.data.model["loaded"] = False
+    api.delete_server(server_id, delete_server_response_handler)
 
 
 def load_servers():
     servers_tmpl.append(Template(
-        "servers-stat", [add_server, toggle_add_server, change_auth_mode]))
+        "servers-stat", [add_server, delete_server,
+                         toggle_add_server, change_auth_mode]))
 
     def servers_response_handler(response):
         if "error" in response:
             alert(response["error"])
+        else:
+            model["servers"] = response
         model["loaded"] = True
         servers_tmpl[0].render(model=model)
 

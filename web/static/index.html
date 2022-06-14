@@ -22,7 +22,7 @@
             <!-- <div class="column is-3 ">
             <div id="left-menu" b-include="templates/left_menu.html"></div>
         </div> -->
-            <div class="column">
+            <div class="column" id="servers-stat">
                 <section class="hero is-info welcome is-small">
                     <div class="hero-body">
                         <div class="container">
@@ -35,12 +35,11 @@
                         </div>
                     </div>
                 </section>
-                <section class="info-tiles">
+                <section class="info-tiles" b-code="if model.get('loaded')">
                     <div class="tile is-ancestor has-text-centered">
                         <div class="tile is-parent">
-                            <article id="servers-stat" class="tile is-child box">
-                                {model}
-                                <div b-code="if model.get('loaded')">
+                            <article class="tile is-child box">
+                                <div>
                                     <div b-code="if model.get('add_server_mode')">
                                         <div class="field is-horizontal">
                                             <div class="field-body">
@@ -108,13 +107,13 @@
                                                         <textarea id="add_server_key" class="textarea"
                                                             placeholder="-----BEGIN OPENSSH PRIVATE KEY-----"
                                                             disabled="{'disabled' if model.get('auth_method')!='key' else False}"></textarea>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="has-text-centered">
-                                            <button class="button is-success mx-3 mt-3"
-                                            b-on="click:add_server">
+                                            <button class="button is-success mx-3 mt-3" b-on="click:add_server">
                                                 Connect
                                             </button>
 
@@ -135,11 +134,32 @@
                                         <span>Add Server</span>
                                     </button>
                                 </div>
-                                <div class="loader" b-code="else">Loading...</div>
                             </article>
                         </div>
                     </div>
                 </section>
+                <div class="card events-card" b-code="if model.get('servers')">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            Servers
+                        </p>
+                    </header>
+                    <div class="card-table">
+                        <div class="content">
+                            <table class="table is-fullwidth is-striped">
+                                <tbody>
+                                    <tr b-code="for server in model.get('servers'):">
+                                        <td width="5%" class="servers-row-icon"><i class="fa fa-bell-o"></i></td>
+                                        <td class="servers-row">{server.get('host')}</td>
+                                        <td class="level-right"><a class="button is-small is-danger"
+                                                href="#" b-on="click:delete_server" id="{server.get('_id')}">Delete</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader" b-code="if not model.get('loaded')">Loading...</div>
             </div>
         </div>
     </div>
