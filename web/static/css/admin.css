@@ -5,7 +5,6 @@ body {
   font-size: 16px;
   line-height: 1.5;
   height: 100%;
-  background: #ecf0f3;
 }
 nav.navbar {
   border-top: 4px solid #276cda;
@@ -82,13 +81,6 @@ nav.navbar {
 .events-card .card-table {
   max-height: 100%;
   overflow-y: scroll;
-}
-.servers-row {
-  vertical-align: middle !important;
-}
-.servers-row-icon {
-  text-align: center !important;
-  vertical-align: middle !important;
 }
 .loader,
 .loader:after {

@@ -1,43 +1,10 @@
-from browser import alert, document
+from browser import alert
 from browser.template import Template
 
 import api
-from models import Server
 
 servers_tmpl = []
 model = {}
-
-
-def toggle_add_server(ev, el):
-    el.data.model["add_server_mode"] = not el.data.model.get(
-        "add_server_mode", False)
-
-
-def change_auth_mode(ev, el):
-    el.data.model["auth_method"] = ev.target.value
-
-
-def add_server(ev, el):
-    auth_method = el.data.model.get("auth_method", "password")
-    server = Server(document["add_server_username"].value,
-                    document["add_server_host"].value,
-                    document["add_server_port"].value,
-                    auth_method, document["add_server_password"].value,
-                    document["add_server_key"].value)
-
-    def add_server_response_handler(response):
-        if "error" in response:
-            alert(response["error"])
-        else:
-            if "servers" not in model:
-                model["servers"] = []
-            model["servers"].append(response)
-        model["loaded"] = True
-        servers_tmpl[0].render(model=model)
-
-    el.data.model["loaded"] = False
-    el.data.model["add_server_mode"] = False
-    api.create_server(server.toJSON(), add_server_response_handler)
 
 
 def delete_server(ev, el):
@@ -58,8 +25,7 @@ def delete_server(ev, el):
 
 def load_servers():
     servers_tmpl.append(Template(
-        "servers-stat", [add_server, delete_server,
-                         toggle_add_server, change_auth_mode]))
+        "servers-stat", [delete_server]))
 
     def servers_response_handler(response):
         if "error" in response:

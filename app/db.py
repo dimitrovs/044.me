@@ -48,7 +48,7 @@ def insert_server(server):
         return
     if "owner_id" not in server or not server["owner_id"]:
         print(f"insert_server called with invalid owner_id: {server}")
-    if "_id" in server and server["_id"] != None:
+    if "_id" in server and server["_id"] is not None:
         print(f"_id found in server to insert, this is not expected: {server}")
         del server["_id"]
     collection = db["servers"]

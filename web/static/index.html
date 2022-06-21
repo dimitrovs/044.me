@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>044.me - Server Management</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" href="css/admin.css">
     <script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js">
     </script>
@@ -23,142 +23,25 @@
             <div id="left-menu" b-include="templates/left_menu.html"></div>
         </div> -->
             <div class="column" id="servers-stat">
-                <section class="hero is-info welcome is-small">
-                    <div class="hero-body">
-                        <div class="container">
-                            <h1 class="title">
-                                Hello,
-                            </h1>
-                            <h2 class="subtitle">
-                                I hope you are having a great day!
-                            </h2>
-                        </div>
+                <nav class="panel is-info" b-code="if model.get('loaded')">
+                    <p class="panel-heading">
+                        Servers
+                    </p>
+                    <a class="panel-block" b-code="for server in model.get('servers', []):">
+                        <span class="panel-icon">
+                            <i class="fa fa-book" aria-hidden="true"></i>
+                        </span>
+                        {server.get('host')}
+                    </a>
+                    <div class="panel-block">
+                        <a class="button is-success is-fullwidth" href="add_server.html">
+                            <span class="icon is-small">
+                                <i class="fa fa-plus"></i>
+                            </span>
+                            <span>Add Server</span>
+                        </a>
                     </div>
-                </section>
-                <section class="info-tiles" b-code="if model.get('loaded')">
-                    <div class="tile is-ancestor has-text-centered">
-                        <div class="tile is-parent">
-                            <article class="tile is-child box">
-                                <div>
-                                    <div b-code="if model.get('add_server_mode')">
-                                        <div class="field is-horizontal">
-                                            <div class="field-body">
-                                                <div class="field is-expanded">
-                                                    <div class="field has-addons">
-                                                        <div class="control is-expanded">
-                                                            <input id="add_server_username" class="input" type="text"
-                                                                value="root" required>
-                                                            <p class="help">username</p>
-                                                        </div>
-                                                        <div class="control">
-                                                            <a class="button is-static">
-                                                                @
-                                                            </a>
-                                                        </div>
-                                                        <div class="control is-expanded">
-                                                            <input id="add_server_host" class="input" type="text"
-                                                                placeholder="127.0.0.1" required>
-                                                            <p class="help">IP or host</p>
-                                                        </div>
-                                                        <p class="control">
-                                                            <a class="button is-static">
-                                                                :
-                                                            </a>
-                                                        </p>
-                                                        <div class="control">
-                                                            <input id="add_server_port" class="input is-normal"
-                                                                type="number" value="22" min="1" max="65535" required>
-                                                            <p class="help">port</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="field is-horizontal">
-                                            <div class="field-label is-normal">
-                                                <label class="radio">
-                                                    <input type="radio" name="auth_method" value="password"
-                                                        b-on="click:change_auth_mode"
-                                                        checked="{'checked' if model.get('auth_method', 'password')=='password' else False}">
-                                                    Password
-                                                </label>
-                                            </div>
-                                            <div class="field-body">
-                                                <div class="field is-expanded">
-                                                    <div class="control is-expanded">
-                                                        <input id="add_server_password" class="input" type="password"
-                                                            disabled="{'disabled' if model.get('auth_method','password')!='password' else False}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="field is-horizontal">
-                                            <div class="field-label is-normal">
-                                                <label class="radio">
-                                                    <input type="radio" name="auth_method" value="key"
-                                                        b-on="click:change_auth_mode"
-                                                        checked="{'checked' if model.get('auth_method')=='key' else False}">
-                                                    Private Key
-                                                </label>
-                                            </div>
-                                            <div class="field-body">
-                                                <div class="field is-expanded">
-                                                    <div class="control is-expanded">
-                                                        <textarea id="add_server_key" class="textarea"
-                                                            placeholder="-----BEGIN OPENSSH PRIVATE KEY-----"
-                                                            disabled="{'disabled' if model.get('auth_method')!='key' else False}"></textarea>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="has-text-centered">
-                                            <button class="button is-success mx-3 mt-3" b-on="click:add_server">
-                                                Connect
-                                            </button>
-
-                                            <button class="button is-secondary mx-3 mt-3"
-                                                b-on="click:toggle_add_server">
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div b-code="elif model.get('servers')">
-                                        <p class="title">{len(model.get('servers'))}</p>
-                                        <p class="subtitle">Server(s)</p>
-                                    </div>
-                                    <button class="button is-success" b-code="else" b-on="click:toggle_add_server">
-                                        <span class="icon is-small">
-                                            <i class="fa fa-plus"></i>
-                                        </span>
-                                        <span>Add Server</span>
-                                    </button>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </section>
-                <div class="card events-card" b-code="if model.get('servers')">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            Servers
-                        </p>
-                    </header>
-                    <div class="card-table">
-                        <div class="content">
-                            <table class="table is-fullwidth is-striped">
-                                <tbody>
-                                    <tr b-code="for server in model.get('servers'):">
-                                        <td width="5%" class="servers-row-icon"><i class="fa fa-bell-o"></i></td>
-                                        <td class="servers-row">{server.get('host')}</td>
-                                        <td class="level-right"><a class="button is-small is-danger"
-                                                href="#" b-on="click:delete_server" id="{server.get('_id')}">Delete</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                </nav>
                 <div class="loader" b-code="if not model.get('loaded')">Loading...</div>
             </div>
         </div>
