@@ -15,6 +15,16 @@ def get_servers(user):
     return jsonify(db.get_servers_by_owner(user["_id"]))
 
 
+@servers.route("/<server_id>", methods=['GET'])
+@auth_required
+def get_server(user, server_id):
+    result = db.get_server_by_id(user["_id"], server_id)
+    if result:
+        return jsonify(result)
+    else:
+        abort(404)
+
+
 @servers.route("/", methods=['POST'])
 @auth_required
 def create_server(user):

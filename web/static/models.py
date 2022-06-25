@@ -6,7 +6,8 @@ class BaseModel:
 class Server(BaseModel):
     def __init__(self, username, host, port, auth_method, password=None,
                  ssh_key=None, _id=None):
-        self._id = _id
+        if _id:
+            self._id = _id
         self.username = username
         self.host = host
         self.port = port
@@ -18,4 +19,4 @@ class Server(BaseModel):
     def fromJSON(data: dict):
         return Server(data["username"], data["host"],
                       data["port"], data.get("auth_method"),
-                      data.get("password"), data.get("ssh_key"))
+                      data.get("password"), data.get("ssh_key"), data.get("_id"))

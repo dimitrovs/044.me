@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>044.me - Server Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js">
+    </script>
+</head>
+
+<body onload="brython()">
+    <script type="text/python" src="view_server.py"></script>
+    <div id="header" b-include="templates/header.html"></div>
+    <div class="section">
+        <div class="columns">
+            <!-- <div class="column is-3 ">
+            <div id="left-menu" b-include="templates/left_menu.html"></div>
+        </div> -->
+            <div class="column" id="server-view">
+                <div class="card" b-code="if model.get('server')">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon"><i class="fa fa-circle"></i></span>
+                            Server
+                        </p>
+                        <div class="dropdown is-right" id="server-options">
+                            <div class="dropdown-trigger">
+                              <button class="card-header-icon" aria-label="more options" aria-haspopup="true" aria-controls="dropdown-menu" b-on="click:toggle_menu">
+                                <span class="icon">
+                                  <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                </span>
+                              </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                              <div class="dropdown-content">
+                                <a class="dropdown-item" b-on="click:delete_server">
+                                  Delete
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        
+                    </header>
+                    <div class="card-content">
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control is-clearfix">
+                                <input type="text" readonly="" value="{model['server'].username}"
+                                    class="input is-static">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="field">
+                            <label class="label">Host</label>
+                            <div class="control is-clearfix">
+                                <input type="text" readonly="" value="{model['server'].host}" class="input is-static">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="field">
+                            <label class="label">Port</label>
+                            <div class="control is-clearfix">
+                                <input type="text" readonly="" value="{model['server'].port}" class="input is-static">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="field">
+                            <label class="label">Authentication</label>
+                            <div class="control is-clearfix">
+                                <input type="text" readonly=""
+                                    value="{'RSA key' if model['server'].auth_method=='key' else 'password'}"
+                                    class="input is-static">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader" b-code="if not model.get('loaded')">Loading...</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

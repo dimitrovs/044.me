@@ -42,6 +42,23 @@ def get_servers_by_owner(owner_id: str):
     return list(collection.find({"owner_id": owner_id}))
 
 
+def get_server_by_id(owner_id: str, server_id: str):
+    if not owner_id:
+        print("get_server_by_id called without owner_id")
+        return
+    if not server_id:
+        print("get_server_by_id called without server_id")
+        return
+    try:
+        _id = ObjectId(server_id)
+        collection = db["servers"]
+        return collection.find_one({"owner_id": owner_id, "_id": _id})
+    except Exception as e:
+        print(f"get_server_by_id failed for owner_id {owner_id} and server_id {server_id}")
+        print(e)
+        return
+
+
 def insert_server(server):
     if not server:
         print("insert_server called without server")

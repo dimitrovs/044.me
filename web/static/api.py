@@ -45,6 +45,10 @@ def get_user(response_handler):
     make_request(f"{API}/user/", "GET", response_handler)
 
 
+def get_server(server_id, response_handler):
+    make_request(f"{API}/servers/{server_id}", "GET", response_handler)
+
+
 def get_servers(response_handler):
     make_request(f"{API}/servers/", "GET", response_handler)
 

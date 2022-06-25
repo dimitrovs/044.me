@@ -17,7 +17,7 @@
 <body onload="brython()">
     <script type="text/python" src="index.py"></script>
     <div id="header" b-include="templates/header.html"></div>
-    <div class="container">
+    <div class="section">
         <div class="columns">
             <!-- <div class="column is-3 ">
             <div id="left-menu" b-include="templates/left_menu.html"></div>
@@ -27,7 +27,8 @@
                     <p class="panel-heading">
                         Servers
                     </p>
-                    <a class="panel-block" b-code="for server in model.get('servers', []):">
+                    <a class="panel-block" b-code="for server in model.get('servers', []):"
+                        href="view_server.html?_id={server.get('_id')}">
                         <span class="panel-icon">
                             <i class="fa fa-book" aria-hidden="true"></i>
                         </span>
